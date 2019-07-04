@@ -6,7 +6,6 @@ using System.IO;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace PAS.Pages
 {
-
     public class ImportSQLModel : PageModel
     {
         public string error;
@@ -42,7 +41,8 @@ namespace PAS.Pages
                     return;
                 }//Exists if database errors
 
-                using (streamReader = new StreamReader("Model/PAS.csv"))
+
+                using (streamReader = new StreamReader("wwwroot/Model/PAS.csv"))
                 {
                     streamReader.ReadLine();//Reads the header line so it isn't parsed as data
                     csvLine = streamReader.ReadLine();
@@ -56,7 +56,7 @@ namespace PAS.Pages
                         }//Puts commas back in strings
 
                         brother = new Brother();
-                        if(int.TryParse(csvLineComponents[0], out var unused))
+                        if (int.TryParse(csvLineComponents[0], out var unused))
                         {
                             brother.year = int.Parse(csvLineComponents[0]);
                         }
@@ -64,18 +64,18 @@ namespace PAS.Pages
                         {
                             brother.year = null;
                         }
-                        brother.name = String.IsNullOrEmpty(csvLineComponents[1]) ? null: csvLineComponents[1] ;
+                        brother.name = String.IsNullOrEmpty(csvLineComponents[1]) ? null : csvLineComponents[1];
                         brother.staffName = String.IsNullOrEmpty(csvLineComponents[2]) ? null : csvLineComponents[2];
                         brother.bigBrother = String.IsNullOrEmpty(csvLineComponents[3]) ? null : csvLineComponents[3];
                         bigBrotherId = null;
-                        brother.status =  Enum.TryParse<Status>(csvLineComponents[4],out var unused2)?(Status)Enum.Parse(typeof(Status),csvLineComponents[4]):Status.Brother;//Converts array to struct
+                        brother.status = Enum.TryParse<Status>(csvLineComponents[4], out var unused2) ? (Status)Enum.Parse(typeof(Status), csvLineComponents[4]) : Status.Brother;//Converts array to struct
 
                         if (null != brother.bigBrother)
                         {
                             queryParameters = new List<SqlParameter>();
                             queryParameters.Add(new SqlParameter("@Name", brother.bigBrother));
-                            queryResult = Connection.RunSQL("SELECT id FROM pas WHERE name = @Name",queryParameters, ref error);
-                            if(false == String.IsNullOrEmpty(error))
+                            queryResult = Connection.RunSQL("SELECT id FROM pas WHERE name = @Name", queryParameters, ref error);
+                            if (false == String.IsNullOrEmpty(error))
                             {
                                 return;
                             }//Exits if query errored
@@ -106,7 +106,8 @@ VALUES(@Year, @Name, @StaffName, @BigBrother, @Status);", queryParameters, ref e
             }
             catch (Exception e)
             {
-                error = e.Message;
+                error = e.Message; 
+                
             }
         }
     }

@@ -5,6 +5,8 @@
     <ApplicationIcon />
     <OutputType>Exe</OutputType>
     <StartupObject />
+    <UserSecretsId>7337b95a-1601-4d61-a8a9-3a54a8c72b1c</UserSecretsId>
+    <TypeScriptToolsVersion>3.1</TypeScriptToolsVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -21,6 +23,7 @@
 
   <ItemGroup>
     <None Include="wwwroot\js\d3.js" />
+    <None Include="wwwroot\Model\PAS.csv" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,6 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Properties\PublishProfiles\" />
     <Folder Include="wwwroot\css\" />
   </ItemGroup>
 

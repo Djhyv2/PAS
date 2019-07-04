@@ -7,8 +7,11 @@ namespace PAS
 {
     public class Connection
     {
-        private static string connectionString = "Server = w1969835\\sqlexpress; Database=PAS;User Id = admin; Password=password;";
-        
+
+        //private static string connectionString = "Server = w1969835\\sqlexpress; Database=PAS;User Id = admin; Password=password;";
+        private static string connectionString = "Server=tcp:phialphasigma.database.windows.net,1433;Initial Catalog=PhiAlphaSigma;Persist Security Info=False;User ID=Admin1;Password=Password1;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+
+
         /// <summary>
         /// Executes the passed SQL command
         /// </summary>
