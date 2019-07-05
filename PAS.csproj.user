@@ -2,6 +2,6 @@
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <NameOfLastUsedPublishProfile>PhiAlphaSigma - Web Deploy</NameOfLastUsedPublishProfile>
-    <ToolsVersionPromptShown>0.0</ToolsVersionPromptShown>
+    <ToolsVersionPromptShown>3.1</ToolsVersionPromptShown>
   </PropertyGroup>
 </Project>

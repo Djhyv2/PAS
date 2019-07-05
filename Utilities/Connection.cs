@@ -2,14 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 
 namespace PAS
 {
     public class Connection
     {
 
-        //private static string connectionString = "Server = w1969835\\sqlexpress; Database=PAS;User Id = admin; Password=password;";
-        private static string connectionString = "Server=tcp:phialphasigma.database.windows.net,1433;Initial Catalog=PhiAlphaSigma;Persist Security Info=False;User ID=Admin1;Password=Password1;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+        private static string connectionString = ("Production" != Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")) ? "Server = w1969835\\sqlexpress; Database=PAS;User Id = admin; Password=password;" : "Server=tcp:phialphasigma.database.windows.net,1433;Initial Catalog=PhiAlphaSigma;Persist Security Info=False;User ID=Admin1;Password=Password1;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";//Connects to local if non-prod
 
 
         /// <summary>

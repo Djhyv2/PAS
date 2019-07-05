@@ -8,6 +8,7 @@ const rectWidth = 70;
 const rectHeight = 50;//Size of nodes
 const nodeWidth = rectWidth + 2 * nodeMargin;
 const nodeHeight = rectHeight + 2 * nodeMargin;//Size of nodes
+const rectInnerBorderWidth = 1;
 
 $(document).ready(() =>
 {
@@ -118,23 +119,24 @@ function drawNodes()
         .attr('class', 'node')
         .attr('width', rectWidth)
         .attr('height', rectHeight)
-        .attr('opacity', .5)
+        .attr('opacity', 1)
         .attr('stroke', 'black')
-        .attr('stroke-width', 1)
+        .attr('stroke-width', rectInnerBorderWidth)
         .attr('x', brother => brother.x + nodeMargin)
         .attr('y', brother => brother.y + nodeMargin)//Creates rects and assigns attributes to all nodes
         .on('click', collapse);
 
     nodesEntered
         .append('foreignObject')
-        .attr('x', brother => brother.x + nodeMargin)
-        .attr('y', brother => brother.y + nodeMargin)
-        .attr('height', rectHeight)
-        .attr('width', rectWidth)
+        .attr('x', brother => brother.x + nodeMargin + rectInnerBorderWidth)
+        .attr('y', brother => brother.y + nodeMargin + rectInnerBorderWidth)
+        .attr('height', rectHeight - 2 * rectInnerBorderWidth)
+        .attr('width', rectWidth - 2 * rectInnerBorderWidth)
         .on('click', collapse)
         .append('xhtml:body')
-        .style('font-size', '8px')
-        .html(brother => `${brother.data.name}<br/>${brother.data.status} ${brother.data.staffName}`);
+        .style('font-size', '6px')
+        .style('background', 'transparent')
+        .html(brother => `<p>${brother.data.name}<br/>${brother.data.year}<br/>${brother.data.status} ${brother.data.staffName}</p>`);
     //Does work on newly entered
 
 
@@ -145,7 +147,7 @@ function drawNodes()
 
     nodes = svg
         .selectAll('.node')
-        .attr('fill', brother => { return brother.children ? '#005b9a' : brother._children ? '#149ddf' : '#808080' });//Dark Blue if open children, Light Blue if collapsed children, Grey if neither
+        .attr('fill', brother => { return brother.children ? '#398ff0' : brother._children ? '#aecef2' : '#808080' });//Dark Blue if open children, Light Blue if collapsed children, Grey if neither
 
     
     /*
