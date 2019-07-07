@@ -16,8 +16,6 @@ $(document).ready(() =>
     const brotherJson = d3.csvParse($('#csvBrotherData').val());//Parse CSV to Json
     brotherHeirarchy = d3.stratify().id((brother) => brother.brotherID).parentId((brother) => brother.bigBrotherID)(brotherJson);//Parse JSON to heirarchy
 
-
-
     treeLayout = d3.tree()
         .nodeSize([nodeHeight, nodeWidth])//Order reversed to make a horizontal tree
         .separation((a, b) => a.parent == b.parent ? 1 : 1)//Can be used to make siblings closer than cousins
@@ -43,14 +41,10 @@ $(document).ready(() =>
         .append('svg')
         .attr('width', '100%')
         .attr('height', '100vh')
-        .call(d3.zoom()
-            .scaleExtent([.5, 2])
-            //.translateExtent([minX - translateBorder, minY - translateBorder], [maxX + translateBorder, maxY + translateBorder])
-            .on('zoom', () =>
-            {
-                svg.attr('transform', `translate(${Math.max(0, Math.min(d3.event.transform.x + minX, maxX - minX - d3.event.transform.k * 50))},${Math.max(0, Math.min(d3.event.transform.y, maxY - minY - d3.event.transform.k * 50))})scale(${d3.event.transform.k})`);
-                //svg.attr('transform', d3.event.transform);
-            }))//Enables zooming and panning
+        .call(d3.zoom().on('zoom', () =>
+        {
+            svg.attr('transform', d3.event.transform);
+        }))//Enables zooming and panning
         .append('g');//Create graphic and base group in container
 
 
@@ -140,10 +134,6 @@ function drawNodes()
 
     nodesEntered
         .append('foreignObject')
-        /*.attr('x', brother => brother.x + nodeMargin + rectInnerBorderWidth)
-        .attr('y', brother => brother.y + nodeMargin + rectInnerBorderWidth)
-        .attr('height', rectHeight - 2 * rectInnerBorderWidth)
-        .attr('width', rectWidth - 2 * rectInnerBorderWidth)*/
         .attr('x', brother => brother.x + nodeMargin)
         .attr('y', brother => brother.y + nodeMargin)
         .attr('height', rectHeight)
