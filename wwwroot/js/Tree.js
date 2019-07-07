@@ -9,15 +9,14 @@ const rectHeight = 19;//Size of content of nodes
 const nodeWidth = rectWidth + 2 * nodeMargin;
 const nodeHeight = rectHeight + 2 * nodeMargin;//Size of nodes
 const rectInnerBorderWidth = 1;//Border on content of nodes
+const translateBorder = 100;//Border around graph you can translate to
 
 $(document).ready(() =>
 {
     const brotherJson = d3.csvParse($('#csvBrotherData').val());//Parse CSV to Json
     brotherHeirarchy = d3.stratify().id((brother) => brother.brotherID).parentId((brother) => brother.bigBrotherID)(brotherJson);//Parse JSON to heirarchy
 
-    const margin = { top: 40, right: 40, bottom: 40, left: 40 };
-    const width = 4096 - margin.left - margin.right;
-    const height = 2048 - margin.top - margin.bottom;//Set dimensions of tree
+
 
     treeLayout = d3.tree()
         .nodeSize([nodeHeight, nodeWidth])//Order reversed to make a horizontal tree
@@ -30,17 +29,29 @@ $(document).ready(() =>
 
     brotherLinks = brotherHeirarchy.links();//Gets array of all links from brothers
 
+    let minX= 0, maxX = 0, minY = 0, maxY = 0;
+    brotherData.forEach(brother =>
+    {
+        minX = Math.min(minX, brother.x);
+        maxX = Math.max(maxX, brother.x);
+        minY = Math.min(minY, brother.y);
+        maxY = Math.max(maxY, brother.y);
+    });//Finds min/max values to set translate extent
+
     svg = d3
         .select('.tree-container')
         .append('svg')
-        .attr('width', width + margin.left + margin.right)
-        .attr('height', height + margin.top + margin.bottom)
-        .call(d3.zoom().on('zoom', () =>
-        {
-            svg.attr('transform', d3.event.transform)
-        }))//Enables zooming and panning
-        .append('g')
-        .attr('transform', `translate(${margin.left},${margin.top})`);//Create graphic and base group in container
+        .attr('width', '100%')
+        .attr('height', '100vh')
+        .call(d3.zoom()
+            .scaleExtent([.5, 2])
+            //.translateExtent([minX - translateBorder, minY - translateBorder], [maxX + translateBorder, maxY + translateBorder])
+            .on('zoom', () =>
+            {
+                svg.attr('transform', `translate(${Math.max(0, Math.min(d3.event.transform.x + minX, maxX - minX - d3.event.transform.k * 50))},${Math.max(0, Math.min(d3.event.transform.y, maxY - minY - d3.event.transform.k * 50))})scale(${d3.event.transform.k})`);
+                //svg.attr('transform', d3.event.transform);
+            }))//Enables zooming and panning
+        .append('g');//Create graphic and base group in container
 
 
     brotherData.forEach(brother =>

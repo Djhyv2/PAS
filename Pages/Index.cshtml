@@ -8,3 +8,13 @@
     <input type="hidden" id="csvBrotherData" value="@Model.csvBrothersData" />
 </div>
 <div class="tree-container"></div>
+<p>
+    @if (false == String.IsNullOrEmpty(Model.error))
+    {
+    @Model.error;
+    }
+    else
+    {
+    @("");
+    }
+</p>
