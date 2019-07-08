@@ -27,15 +27,6 @@ $(document).ready(() =>
 
     brotherLinks = brotherHeirarchy.links();//Gets array of all links from brothers
 
-    let minX= 0, maxX = 0, minY = 0, maxY = 0;
-    brotherData.forEach(brother =>
-    {
-        minX = Math.min(minX, brother.x);
-        maxX = Math.max(maxX, brother.x);
-        minY = Math.min(minY, brother.y);
-        maxY = Math.max(maxY, brother.y);
-    });//Finds min/max values to set translate extent
-
     svg = d3
         .select('.tree-container')
         .append('svg')
@@ -53,6 +44,7 @@ $(document).ready(() =>
         brother.x0 = brother.x;
         brother.y0 = brother.y;
     });//Saves previous position of each node to be used for transitions
+    //Does nothing currently as no transitions
 
     drawLinks();
     drawNodes();
