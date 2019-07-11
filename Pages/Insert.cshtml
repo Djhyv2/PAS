@@ -1,12 +1,34 @@
 ﻿@page
 @model PAS.Pages.InsertModel
-
-<script src="~/js/Insert.js"></script>
-
-<h2>Insert</h2>
-<input class="datepicker"/>
-<div class="row">
-    <label class="col">Name:</label>
-    <label class="col"></label>
+<div>
+    <script src="~/js/Insert.js"></script>
+    <input type="hidden" id="jsonBigBrothers" value="@Model.jsonBigBrothers" />
 </div>
+<h2 class="title">Insert</h2>
+<p>
+    @if (false == String.IsNullOrEmpty(Model.error))
+    {
+    @Model.error;
+    }
+    else
+    {
+    @("");
+    }
+</p>
+<form id="frmBrothers" name="frmBrothers" method="post">
+    <div class="form-row">
+        <label class="col-1 col-form-label" for="cmbYear">Year:</label>
+        <select id="ddlYear" name="ddlYear" class="col-md-1 col-2 form-control custom-select"></select>
+    </div>
+    <div class="form-row">
+        <label class="col-form-label col-3">Name:</label>
+        <label class="col-form-label col-3">Staff Name:</label>
+        <label class="col-form-label col-3">Big Brother:</label>
+        <label class="col-form-label col-2">Status:</label>
+        <div class="px-1 col-1">
+            <button class="btn btn-block" onclick="addRow()">+</button>
+        </div>
+    </div>
+    <button type="submit" id="btnSubmit" name="btnSubmit" value="-1">Submit</button>
+</form>
 
