@@ -135,7 +135,11 @@ function drawNodes()
         .style('font-size', '6px')
         .style('background', 'transparent')
         .style('padding', `${rectInnerBorderWidth}px`)
-        .html(brother => `<p>${brother.data.name} (${brother.data.year})<br/>${brother.data.status} ${brother.data.staffName}</p>`);//Creates html p tag
+        .html(brother =>
+        {
+            let link =(0 != brother.data.brotherID) ? `<a class="text-warning" href="/Edit?Id=${brother.data.brotherID}">Edit</a>` : ""
+            return `<p>${brother.data.name} (${brother.data.year}) ${link}<br/>${brother.data.status} ${brother.data.staffName}</p>`;//Creates html p tag
+        });
 
 
     nodes

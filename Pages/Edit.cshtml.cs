@@ -48,7 +48,7 @@ namespace PAS.Pages
             jsonBigBrothers = MiscUtilities.GetBigBrothersJson(ref error);//Gets JSON for big brother dropdown
 
             queryParameters.Add(new SqlParameter("@Id", Id));
-            brother = Connection.RunSQL("SELECT 1992 AS year, 'Most Recent Common Ancestor' AS name, 'Phi Alpha Sigma' AS staffName, NULL AS status, 0 AS brotherID, -1 AS bigBrotherID UNION SELECT brother.year, brother.name, brother.staffName, brother.status, brother.id AS brotherID, ISNULL(bigBrother.id, 0) AS bigBrotherID FROM pas AS brother LEFT OUTER JOIN pas AS bigBrother ON brother.bigBrother = bigBrother.id WHERE id = @Id ORDER BY brotherID ", queryParameters, ref error);//Gets brother to database
+            brother = Connection.RunSQL("SELECT year, name, staffName, status, ISNULL(bigBrother, 0) AS bigBrother FROM pas WHERE id = @Id", queryParameters, ref error);//Gets brother to database
             if (false == String.IsNullOrEmpty(error))
             {
                 return;
@@ -62,7 +62,11 @@ namespace PAS.Pages
             staffName = brother.Rows[0]["staffName"].ToString();
             year = int.Parse(brother.Rows[0]["year"].ToString());
             status = (Status)Enum.Parse(typeof(Status), brother.Rows[0]["status"].ToString());
-            //bigBrother = int.Parse
+            bigBrother = int.Parse(brother.Rows[0]["bigBrother"].ToString());//Gets values from database
+        }
+
+        public void OnPost()
+        {
 
         }
     }
