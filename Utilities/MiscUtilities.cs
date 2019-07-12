@@ -1,10 +1,11 @@
-﻿using System.Data;
+﻿using Newtonsoft.Json;
+using System.Data;
 using System.Linq;
 using System.Text;
 
 namespace PAS
 {
-    public class CSV
+    public class MiscUtilities
     {
         public static string tableToCsv(DataTable dataTable)
         {
@@ -23,5 +24,15 @@ namespace PAS
 
             return stringBuilder.ToString();
         }//Converts table to csv string
+
+        public static string GetBigBrothersJson(ref string error)
+        {
+            DataTable bigBrothers = Connection.RunSQL("SELECT 0 AS id, 'Most Recent Common Ancestor' AS name, 'Phi Alpha Sigma' AS staffName UNION SELECT id, name, staffName FROM pas", ref error);
+            if (false == string.IsNullOrEmpty(error))
+            {
+                return null;
+            }//Exit if database errors
+            return JsonConvert.SerializeObject(bigBrothers);
+        }
     }
 }

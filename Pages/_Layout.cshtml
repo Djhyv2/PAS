@@ -13,24 +13,36 @@
     <script src="~/js/bootstrap-combobox.js"></script>
     <link rel="stylesheet" href="~/css/bootstrap-combobox.css"><!-- https://github.com/danielfarrell/bootstrap-combobox -->
     <link rel="stylesheet" type="text/css" href="~/css/MainStyle.css" />
+    <script src="~/js/MainJS.js"></script>
 </head>
 <body>
-    <nav class="navbar navbar-expand-sm">
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link" asp-page="Index">Home</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" asp-page="ImportSQL">Import</a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" asp-page="Insert">Insert</a>
-            </li>
-        </ul>
-    </nav>
-    <div class="px-4">
-        @RenderBody()
+    <div class="wrapper">
+        <nav class="navbar navbar-expand-sm">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" asp-page="Index">Home</a>
+                <!--</li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-page="ImportSQL">Import</a>
+                </li>-->
+                <li class="nav-item">
+                    <a class="nav-link" asp-page="Insert">Insert</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-page="Insert">Insert</a>
+                </li>
+            </ul>
+        </nav>
+        <div class="px-4">
+            @RenderBody()
+        </div>
+        <div class="push"></div>
+    </div>
+    <div class="footer container-fluid">
+        <div class="row">
+            <span class="col">Made by Dustin Hengel and Cliff Hoye</span>
+            <span class="col text-right">Legally Owned by Cerner™</span>
+        </div>
     </div>
 </body>
 </html>

@@ -17,7 +17,7 @@ namespace PAS.Pages
             {
                 return;
             }//Exit if database errors
-            csvBrothersData = CSV.tableToCsv(brothers).Replace("-1","");//Replaces common ancestor's ancestor with nothing
+            csvBrothersData = MiscUtilities.tableToCsv(brothers).Replace("-1","");//Replaces common ancestor's ancestor with nothing
         }
 
         

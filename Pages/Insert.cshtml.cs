@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Newtonsoft.Json;
 
 namespace PAS.Pages
 {
@@ -13,13 +11,8 @@ namespace PAS.Pages
         public string jsonBigBrothers;
         public string error;
         public void OnGet()
-        {
-            DataTable bigBrothers = Connection.RunSQL("SELECT 0 AS id, 'Most Recent Common Ancestor' AS name, 'Phi Alpha Sigma' AS staffName UNION SELECT id, name, staffName FROM pas", ref error);
-            if (false == string.IsNullOrEmpty(error))
-            {
-                return;
-            }//Exit if database errors
-            jsonBigBrothers = JsonConvert.SerializeObject(bigBrothers);
+        {   
+            jsonBigBrothers = MiscUtilities.GetBigBrothersJson(ref error);
         }
 
         public void OnPost()

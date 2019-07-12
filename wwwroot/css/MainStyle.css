@@ -1,4 +1,20 @@
-﻿.title
+﻿/* Following is for footer*/
+html, body 
 {
-    text-align: center;
+    height: 100%;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.wrapper 
+{
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -30px auto;
+}
+
+.footer, .push 
+{
+    height: 30px;
 }

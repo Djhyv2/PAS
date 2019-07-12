@@ -4,11 +4,7 @@ let jsonBrothers;//Stores all brothers and ids
 $(document).ready(() =>
 {
     let year;
-    let ddlYear = $('#ddlYear');
-    for (year = new Date().getFullYear(); year >= 2004; year--)
-    {
-        ddlYear.append(`<option>${year}</option>`);
-    }//Add years to combobox
+    PopulateYears($('#ddlYear'));
 
     jsonBrothers = JSON.parse($('#jsonBigBrothers').val());//Parses json string into object
 });
@@ -38,12 +34,7 @@ function addRow()
             <button class="btn-block btn" type="button" onclick="deleteRow(${nextRow})">x</button>
         </div>
     </div>`).insertBefore('#btnSubmit');//Adds row to form
-    let cmbBigBrother = $(`#cmbBigBrother${nextRow}`);
-    $.each(jsonBrothers, (index, value) =>
-    {
-        cmbBigBrother.append(`<option value=${value.id}>${value.name} (${value.staffName})</option>`);
-    })//Adds brothers to drop down list
-    cmbBigBrother.combobox();//Converts select to combobox
+    PopulateBigBrothers($(`#cmbBigBrother${nextRow}`), jsonBrothers);//Populates combobox
     $('#btnSubmit').val(nextRow);//Sets button value to track how many rows have been submitted
     nextRow++;
 }//Adds row to form
