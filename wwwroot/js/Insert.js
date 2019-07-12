@@ -3,7 +3,6 @@ let jsonBrothers;//Stores all brothers and ids
 
 $(document).ready(() =>
 {
-    let year;
     PopulateYears($('#ddlYear'));
 
     jsonBrothers = JSON.parse($('#jsonBigBrothers').val());//Parses json string into object

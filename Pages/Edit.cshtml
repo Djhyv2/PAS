@@ -1,10 +1,10 @@
 ﻿@page
-@model PAS.Pages.EditModel
-
+@model PAS.Pages.EditModel  
 <div>
     <script src="~/js/Edit.js"></script>
     <input type="hidden" id="jsonBigBrothers" value="@Model.jsonBigBrothers" />
 </div>
+<h2 class="text-center">Edit</h2>
 <p>
     @if (false == String.IsNullOrEmpty(Model.error))
     {
@@ -19,46 +19,39 @@
     <input type="hidden" id="hdnId" name="hdnId"/>
     <div class="form-row my-2">
         <label class="col-2 col-form-label" for="cmbYear">Year:</label>
-        <select id="ddlYear" name="ddlYear" class="col-6 form-control custom-select"></select>
+        <div class="col-6">
+            <select id="ddlYear" name="ddlYear" class="form-control custom-select"></select>
+        </div>
     </div>
     <div class="form-row my-2">
         <label class="col-form-label col-2">Name:</label>
-        <input type="text" class="form-control col-6" id="txtName" name="txtName" required />
+        <div class="col-6">
+            <input type="text" class="form-control" id="txtName" name="txtName" required />
+        </div>
     </div>
     <div class="form-row my-2">
         <label class="col-form-label col-2">Staff Name:</label>
-        <input type="text" class="form-control col-6" id="txtStaffName" name="txtStaffName" required />
+        <div class="col-6">
+            <input type="text" class="form-control" id="txtStaffName" name="txtStaffName" required />
+        </div>
     </div>
     <div class="form-row my-2">
         <label class="col-form-label col-2">Big Brother:</label>
-        <select class="form-control col-6" id="cmbBigBrother" name="cmbBigBrother" required>
-            <option value=-1></option>
-        </select>
+        <div class="col-6">
+            <select class="form-control" id="cmbBigBrother" name="cmbBigBrother" required>
+                <option value=-1></option>
+            </select>
+        </div>
     </div>
     <div class="form-row my-2">
         <label class="col-form-label col-2">Status:</label>
-        <select class="form-control custom-select col-6" id="ddlStatus" name="ddlStatus" required>
-            <option value="Brother">Brother</option>
-            <option value="Elder">Elder</option>
-            <option value="Founder">Founder</option>
-        </select>
-    </div>
-        
-      <!--  <div class="px-1 col-1">
-            <button class="btn btn-block" onclick="addRow()">+</button>
+        <div class="col-6">
+            <select class="form-control custom-select" id="ddlStatus" name="ddlStatus" required>
+                <option value="Brother">Brother</option>
+                <option value="Elder">Elder</option>
+                <option value="Founder">Founder</option>
+            </select>
         </div>
     </div>
-    <div class="form-row" id="row${nextRow}">
-        <div class="p-1 col-3 my-1">
-           
-        </div>
-        <div class="p-1 col-3 my-1">
-        </div>
-        <div class="p-1 col-3 my-1">
-        </div>
-        <div class="p-1 my-1 col-1">
-            <button class="btn-block btn" type="button" onclick="deleteRow(${nextRow})">x</button>
-        </div>
-    </div>-->
-    <button type="submit" id="btnSubmit" name="btnSubmit" value="-1">Submit</button>
+    <button type="submit" id="btnSubmit" name="btnSubmit" value="-1">Edit</button>
 </form>
