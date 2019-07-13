@@ -38,7 +38,7 @@ namespace PAS.Pages
                 queryParameters = new List<SqlParameter>();
                 queryParameters.Add(new SqlParameter("@Name", name));
                 queryParameters.Add(new SqlParameter("@StaffName", staffName));
-                queryParameters.Add(new SqlParameter("@BigBrother", bigBrother));
+                queryParameters.Add(new SqlParameter("@BigBrother", (0 == bigBrother) ? (object)DBNull.Value : bigBrother));
                 queryParameters.Add(new SqlParameter("@Status", Enum.GetName(typeof(Status), status)));
                 queryParameters.Add(new SqlParameter("@Year", year));
                 Connection.RunNonQuerySQL("INSERT INTO pas (name, staffName, bigBrother, status, year) VALUES (@Name, @StaffName, @BigBrother, @Status, @Year)", queryParameters, ref error);//Submits info to database
@@ -47,7 +47,7 @@ namespace PAS.Pages
                     return;
                 }//Exits if query errored
             }
-            OnGet();//Runs get again before postback
+            Response.Redirect("/");//Redirect on insert
         }
     }
 }

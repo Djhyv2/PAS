@@ -11,8 +11,12 @@ namespace PAS.Pages
         public string error;
         public void OnGet()
         {
-            error = "Disabled by Administrator";
-            return;//Disables import to avoid overwriting everything
+            if ("Development" != Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"))
+            {
+                error = "Disabled by Administrator";
+                return;//Disables import to avoid overwriting everything
+            }
+            //Allows import if on dev
 
             StreamReader streamReader;
             String csvLine;
