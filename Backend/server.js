@@ -7,7 +7,7 @@ const app = express();
 app.use(cors());
 app.use(express.static('../Frontend/build'));
 
-app.post('/tree', (req, res) =>
+app.post('/treeByYear', (req, res) =>
 {
     sql.connect(auth, (connErr) =>
     {
@@ -16,12 +16,12 @@ app.post('/tree', (req, res) =>
             console.log(connErr);
             res.status(500).send(connErr);
         }
-        new sql.Request().query(`SELECT 2003 AS Year, 'Most Recent Common Ancestor' AS Name, 'Phi Alpha Sigma' AS [Staff Name], NULL AS Status, 0 as id, NULL AS pid, NULL as bigBrotherYear UNION
-        SELECT ISNULL(brother.year,2004) AS Year, brother.name AS Name, brother.staffName AS [Staff Name], brother.status AS Status, brother.id, ISNULL(brother.bigBrother, 0) AS pid, ISNULL(bigBrother.year,2003) AS bigBrotherYear
+        new sql.Request().query(`SELECT ISNULL(brother.year,2004) AS Year, brother.name AS Name, brother.staffName AS [Staff Name], brother.status AS Status, brother.id, ISNULL(brother.bigBrother, 0) AS pid, ISNULL(bigBrother.year,2003) AS bigBrotherYear, bigBrother.name AS "Big Brother"
         FROM pas AS brother 
         LEFT JOIN pas AS bigBrother
         ON brother.bigBrother = bigBrother.id
-        ORDER BY id`, (reqErr, recordset) =>
+        ORDER BY id`,
+        (reqErr, recordset) =>
         {
             if (reqErr)
             {
