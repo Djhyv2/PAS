@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import {
     IonContent, IonHeader, IonPage, IonTitle, IonToolbar,
 } from '@ionic/react';
-import './Tree.css';
+import './YearTree.css';
 import OrgChart from '../components/OrgChart';
 import Data from '../lib/data';
 
-class TreeComponent extends Component
+class YearTreeComponent extends Component
 {
     constructor()
     {
@@ -16,7 +16,7 @@ class TreeComponent extends Component
 
     async componentDidMount()
     {
-        const data = await Data.fetch();
+        const data = await Data.fetchByYear();
         this.setState({ data });
     }
 
@@ -27,13 +27,13 @@ class TreeComponent extends Component
             <IonPage>
                 <IonHeader>
                     <IonToolbar>
-                        <IonTitle>Family Tree</IonTitle>
+                        <IonTitle>Family Tree By Year</IonTitle>
                     </IonToolbar>
                 </IonHeader>
                 <IonContent>
                     <IonHeader collapse="condense">
                         <IonToolbar>
-                            <IonTitle size="large">Family Tree</IonTitle>
+                            <IonTitle size="large">Family Tree By Year</IonTitle>
                         </IonToolbar>
                     </IonHeader>
                     <OrgChart nodes={data} />
@@ -43,4 +43,4 @@ class TreeComponent extends Component
     }
 }
 
-export default TreeComponent;
+export default YearTreeComponent;

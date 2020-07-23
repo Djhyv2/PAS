@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-    IonContent, IonHeader, IonPage, IonTitle, IonToolbar,
+    IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonItem,
 } from '@ionic/react';
 import './Bylaws.css';
 
@@ -17,6 +17,7 @@ const Bylaws = () => (
                     <IonTitle size="large">Bylaws</IonTitle>
                 </IonToolbar>
             </IonHeader>
+            <IonItem>Bylaws currently awaiting approval</IonItem>
         </IonContent>
     </IonPage>
 );

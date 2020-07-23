@@ -10,8 +10,11 @@ import {
     IonTabs,
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { ellipse, square, triangle } from 'ionicons/icons';
-import Tree from './pages/Tree';
+import {
+    addOutline, listOutline, leafOutline, calendarOutline,
+} from 'ionicons/icons';
+import GenerationTree from './pages/GenerationTree';
+import YearTree from './pages/YearTree';
 import Insert from './pages/Insert';
 import Bylaws from './pages/Bylaws';
 
@@ -39,23 +42,28 @@ const App = () => (
         <IonReactRouter>
             <IonTabs>
                 <IonRouterOutlet>
-                    <Route path="/Tree" component={Tree} exact />
+                    <Route path="/GenerationTree" component={GenerationTree} exact />
+                    <Route path="/YearTree" component={YearTree} exact />
                     <Route path="/Insert" component={Insert} exact />
-                    <Route path="/Bylaws" component={Bylaws} />
-                    <Route path="/*" render={() => <Redirect to="/Tree" />} exact />
+                    <Route path="/Bylaws" component={Bylaws} exact />
+                    <Route path="/*" render={() => <Redirect to="/YearTree" />} exact />
                 </IonRouterOutlet>
                 <IonTabBar slot="bottom">
-                    <IonTabButton tab="Tree" href="/Tree">
-                        <IonIcon icon={triangle} />
-                        <IonLabel>Family Tree</IonLabel>
+                    <IonTabButton tab="Tree By Year" href="/YearTree">
+                        <IonIcon icon={calendarOutline} />
+                        <IonLabel>Tree By Year</IonLabel>
+                    </IonTabButton>
+                    <IonTabButton tab="Tree By Generation" href="/GenerationTree">
+                        <IonIcon icon={leafOutline} />
+                        <IonLabel>Tree By Generation</IonLabel>
                     </IonTabButton>
                     <IonTabButton tab="Bylaws" href="/Bylaws">
-                        <IonIcon icon={square} />
+                        <IonIcon icon={listOutline} />
                         <IonLabel>Bylaws</IonLabel>
                     </IonTabButton>
                     <IonTabButton tab="Insert" href="/Insert">
-                        <IonIcon icon={ellipse} />
-                        <IonLabel>Insert</IonLabel>
+                        <IonIcon icon={addOutline} />
+                        <IonLabel>Add</IonLabel>
                     </IonTabButton>
                 </IonTabBar>
             </IonTabs>

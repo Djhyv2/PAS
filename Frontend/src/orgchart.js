@@ -1,3 +1,4 @@
+/* eslint-disable */
 var OrgChart = function (t, e) {
     var r = this;
     if (
