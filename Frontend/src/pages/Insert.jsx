@@ -1,27 +1,36 @@
 /*eslint-disable react/jsx-indent-props*/
 import React, { Component } from 'react';
 import {
-    IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonInput, IonDatetime, IonLabel, IonItem, IonSelectOption, IonSelect, IonButton,
+    IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonInput, IonDatetime, IonLabel, IonItem, IonSelectOption, IonSelect, IonButton, IonCheckbox,
 } from '@ionic/react';
 import './Insert.css';
 import Data from '../lib/data';
+import Form from '../components/Form';
 
 class Insert extends Component
 {
     static insertBrother(e)
     {
         e.preventDefault();
-        const year = parseInt(document.querySelector('#yearSelect').value.slice(0, 4), 10);
-        const name = document.querySelector('#nameInput').value;
-        const staffName = document.querySelector('#staffNameInput').value;
+        const year = parseInt(document.getElementById('yearSelect').value?.slice(0, 4), 10);
+        let name = document.getElementById('nameInput').value;
+        if ('' === name)
+        {
+            name = null;
+        }
+        let staffName = document.getElementById('staffNameInput').value;
+        if ('' === staffName)
+        {
+            staffName = null;
+        }
         const input = document.getElementById('bigBrotherInput');
         const option = document.querySelector(`option[value='${input.value}']`);
-        let bigBrother;
+        let bigBrother = null;
         if (null != option)
         {
             bigBrother = parseInt(option.getAttribute('data-value'), 10);
         }
-        const status = document.querySelector('#statusSelect').value;
+        const status = document.getElementById('statusSelect').value;
         Data.addNew({
             year, name, staffName, bigBrother, status,
         });
@@ -30,7 +39,7 @@ class Insert extends Component
     constructor()
     {
         super();
-        this.state = { bigBrothers: [] };
+        this.state = { bigBrothers: [], allowIncomplete: false };
     }
 
     async componentDidMount()
@@ -108,6 +117,35 @@ class Insert extends Component
                                 <IonSelectOption value="Elder">Elder</IonSelectOption>
                                 <IonSelectOption value="Founder">Founder</IonSelectOption>
                             </IonSelect>
+                        </IonItem>
+                        <IonItem>
+                            <IonCheckbox
+                                slot="start"
+                                onIonChange={(event) =>
+                                {
+                                    let { allowIncomplete } = this.state;
+                                    allowIncomplete = !allowIncomplete;
+                                    this.setState({ allowIncomplete });
+                                    if (allowIncomplete)
+                                    {
+                                        document.querySelectorAll('input').forEach((e) =>
+                                        {
+                                            e.removeAttribute('required');
+                                        });
+                                        document.getElementById('yearSelect').value = null;
+                                        document.getElementById('statusSelect').removeAttribute('required');
+                                    }
+                                    else
+                                    {
+                                        document.getElementById('yearSelect').setAttribute('required', 'required');
+                                        document.getElementById('nameInput').setAttribute('required', 'required');
+                                        document.getElementById('staffNameInput').setAttribute('required', 'required');
+                                        document.getElementById('bigBrotherInput').setAttribute('required', 'required');
+                                        document.getElementById('statusSelect').setAttribute('required', 'required');
+                                    }
+                                }}
+                            />
+                            <IonLabel>Check if adding a brother with incomplete information</IonLabel>
                         </IonItem>
                         <IonButton class="ion-margin-top" expand="block" type="submit">Add</IonButton>
                     </form>

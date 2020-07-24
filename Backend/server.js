@@ -1,10 +1,12 @@
 const express = require('express');
 const sql = require('mssql');
 const cors = require('cors');
+const bodyParser = require('body-parser');
 const auth = require('./auth.json');
 
 const app = express();
 app.use(cors());
+app.use(bodyParser.json());
 app.use(express.static('../Frontend/build'));
 
 function sqlEndpoint(req, res, sqlCommand)
@@ -55,6 +57,12 @@ app.post('/brothersList', (req, res) =>
 {
     sqlEndpoint(req, res, `SELECT ISNULL(name,'') + IIF(staffName IS NULL,'',' - ' + staffName) AS Name, id
     FROM pas ORDER BY year DESC`);
+});
+
+app.post('/addBrother', (req, res) =>
+{
+    sqlEndpoint(req, res, `INSERT INTO pas (year, name, staffName, bigBrother, status)
+    VALUES (${req.body.year},${req.body.name ? `'${req.body.name}'` : null},${req.body.staffName ? `'${req.body.staffName}` : null},${req.body.bigBrother},'${req.body.status}')`);
 });
 
 app.listen(5000, () =>

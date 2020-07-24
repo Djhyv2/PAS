@@ -26,22 +26,23 @@ class Data
 
     static async addNew(brother)
     {
-        console.log(brother);
+        const data = await Data.performReq('addBrother', brother);
+        return data;
     }
 
-    static async performReq(endpoint)
+    static async performReq(endpoint, data)
     {
         let resp;
         try
         {
-            resp = await axios.post(`http://localhost:5000/${endpoint}`);
+            resp = await axios.post(`http://localhost:5000/${endpoint}`, data);
         }
         catch (err)
         {
             console.log(err);
             return [];
         }
-        return resp.data.recordset;
+        return resp?.data?.recordset;
     }
 }
 
