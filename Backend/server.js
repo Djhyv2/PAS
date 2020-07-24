@@ -51,6 +51,12 @@ app.post('/treeByGeneration', (req, res) =>
     SELECT * FROM data ORDER BY year;`);
 });
 
+app.post('/brothersList', (req, res) =>
+{
+    sqlEndpoint(req, res, `SELECT ISNULL(name,'') + IIF(staffName IS NULL,'',' - ' + staffName) AS Name, id
+    FROM pas ORDER BY year DESC`);
+});
+
 app.listen(5000, () =>
 {
     console.log('Server started on Port 5000');

@@ -4,17 +4,7 @@ class Data
 {
     static async fetchByYear()
     {
-        let resp;
-        try
-        {
-            resp = await axios.post('http://localhost:5000/treeByYear');
-        }
-        catch (err)
-        {
-            console.log(err);
-            return {};
-        }
-        const data = resp.data.recordset;
+        const data = await Data.performReq('treeByYear');
         data.forEach((element) =>
         {
             element.tags = [`subLevels${element.Year - element.bigBrotherYear - 1}`];
@@ -24,18 +14,33 @@ class Data
 
     static async fetchByGeneration()
     {
-        console.log('gen');
+        const data = await Data.performReq('treeByGeneration');
+        return data;
+    }
+
+    static async getBrothers()
+    {
+        const data = await Data.performReq('brothersList');
+        return data;
+    }
+
+    static async addNew(brother)
+    {
+        console.log(brother);
+    }
+
+    static async performReq(endpoint)
+    {
         let resp;
         try
         {
-            resp = await axios.post('http://localhost:5000/treeByGeneration');
+            resp = await axios.post(`http://localhost:5000/${endpoint}`);
         }
         catch (err)
         {
             console.log(err);
-            return {};
+            return [];
         }
-        console.log(resp.data.recordset[0]);
         return resp.data.recordset;
     }
 }
