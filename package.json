@@ -1,0 +1,19 @@
+{
+  "name": "pas2",
+  "version": "2.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "cd Frontend && npm i && npm run build && cd ./../Backend && npm i && npm start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Djhyv2/PAS.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Djhyv2/PAS/issues"
+  },
+  "homepage": "https://github.com/Djhyv2/PAS#readme"
+}
