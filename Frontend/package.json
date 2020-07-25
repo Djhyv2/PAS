@@ -5,6 +5,7 @@
   "dependencies": {
     "@balkangraph/orgchart.js": "^7.0.1",
     "@capacitor/core": "2.2.0",
+    "@ionic/cli": "^6.10.1",
     "@ionic/react": "^5.0.7",
     "@ionic/react-router": "^5.0.7",
     "@testing-library/jest-dom": "^4.2.4",
