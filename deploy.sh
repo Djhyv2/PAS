@@ -72,9 +72,16 @@ echo Handling react app deployment.
 
 # 1. Install npm packages
 if [ -e "$DEPLOYMENT_SOURCE/package.json" ]; then
-  cd "$DEPLOYMENT_SOURCE"
-  eval npm start
-  exitWithMessageOnError "start failed"
+  cd "$DEPLOYMENT_SOURCE/Frontend"
+  echo "Running npm install"
+  eval npm install
+  exitWithMessageOnError "npm failed"
+  echo "Building react app"
+  eval npm run build
+  exitWithMessageOnError "react build failed"
+  cd "$DEPLOYMENT_SOURCE/Backend"
+  echo "Running npm install"
+  eval npm install
  cd - > /dev/null
 fi
 
