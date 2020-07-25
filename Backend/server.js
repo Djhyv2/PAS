@@ -61,8 +61,10 @@ app.post('/brothersList', (req, res) =>
 
 app.post('/addBrother', (req, res) =>
 {
+    const name = req.body.name ? `'${req.body.name}'` : null;
+    const staffName = req.body.staffName ? `'${req.body.staffName}'` : null;
     sqlEndpoint(req, res, `INSERT INTO pas (year, name, staffName, bigBrother, status)
-    VALUES (${req.body.year},${req.body.name ? `'${req.body.name}'` : null},${req.body.staffName ? `'${req.body.staffName}` : null},${req.body.bigBrother},'${req.body.status}')`);
+    VALUES (${req.body.year},${name},${staffName},${req.body.bigBrother},'${req.body.status}')`);
 });
 
 app.listen(5000, () =>

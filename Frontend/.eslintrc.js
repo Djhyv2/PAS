@@ -25,5 +25,6 @@ module.exports = {
         indent: [1, 4], //Use 4 spaces for a tab
         'spaced-comment': [1, 'never'], //Makes comments adjacent to // or /*
         'no-continue': [0], //Allows continue statements
+        'react/jsx-indent-props': [0],//Fixes issue with conflicting indent rules
     },
 };

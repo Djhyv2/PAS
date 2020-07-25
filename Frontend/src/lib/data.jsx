@@ -1,3 +1,4 @@
+/*eslint-disable no-console */
 const axios = require('axios');
 
 class Data
@@ -7,6 +8,7 @@ class Data
         const data = await Data.performReq('treeByYear');
         data.forEach((element) =>
         {
+            //eslint-disable-next-line no-param-reassign
             element.tags = [`subLevels${element.Year - element.bigBrotherYear - 1}`];
         });
         return data;

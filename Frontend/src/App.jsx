@@ -11,12 +11,13 @@ import {
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import {
-    addOutline, listOutline, leafOutline, calendarOutline,
+    addOutline, listOutline, leafOutline, calendarOutline, pencilOutline,
 } from 'ionicons/icons';
 import GenerationTree from './pages/GenerationTree';
 import YearTree from './pages/YearTree';
 import Insert from './pages/Insert';
 import Bylaws from './pages/Bylaws';
+import Update from './pages/Update';
 
 /*Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -46,6 +47,7 @@ const App = () => (
                     <Route path="/YearTree" component={YearTree} exact />
                     <Route path="/Insert" component={Insert} exact />
                     <Route path="/Bylaws" component={Bylaws} exact />
+                    <Route path="/Update" component={Update} exact />
                     <Route path="/*" render={() => <Redirect to="/YearTree" />} exact />
                 </IonRouterOutlet>
                 <IonTabBar slot="bottom">
@@ -64,6 +66,10 @@ const App = () => (
                     <IonTabButton tab="Insert" href="/Insert">
                         <IonIcon icon={addOutline} />
                         <IonLabel>Add</IonLabel>
+                    </IonTabButton>
+                    <IonTabButton tab="Update" href="/Update">
+                        <IonIcon icon={pencilOutline} />
+                        <IonLabel>Update</IonLabel>
                     </IonTabButton>
                 </IonTabBar>
             </IonTabs>
