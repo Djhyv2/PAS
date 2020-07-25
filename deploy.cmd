@@ -1,95 +1,141 @@
-#!/bin/bash
+@if "%SCM_TRACE_LEVEL%" NEQ "4" @echo off
 
-# ----------------------
-# KUDU Deployment Script
-# Version: {Version}
-# ----------------------
+:: ----------------------
+:: KUDU Deployment Script
+:: Version: 1.0.17
+:: ----------------------
 
-# Helpers
-# -------
+:: Prerequisites
+:: -------------
 
-exitWithMessageOnError () {
-  if [ ! $? -eq 0 ]; then
-    echo "An error has occurred during web site deployment."
-    echo $1
-    exit 1
-  fi
-}
+:: Verify node.js installed
+where node 2>nul >nul
+IF %ERRORLEVEL% NEQ 0 (
+  echo Missing node.js executable, please install node.js, if already installed make sure it can be reached from current environment.
+  goto error
+)
 
-# Prerequisites
-# -------------
+:: Setup
+:: -----
 
-# Verify node.js installed
-hash node 2>/dev/null
-exitWithMessageOnError "Missing node.js executable, please install node.js, if already installed make sure it can be reached from current environment."
+setlocal enabledelayedexpansion
 
-# Setup
-# -----
+SET ARTIFACTS=%~dp0%..\artifacts
 
-SCRIPT_DIR="${BASH_SOURCE[0]%\\*}"
-SCRIPT_DIR="${SCRIPT_DIR%/*}"
-ARTIFACTS=$SCRIPT_DIR/../artifacts
-KUDU_SYNC_CMD=${KUDU_SYNC_CMD//\"}
+IF NOT DEFINED DEPLOYMENT_SOURCE (
+  SET DEPLOYMENT_SOURCE=%~dp0%.
+)
 
-if [[ ! -n "$DEPLOYMENT_SOURCE" ]]; then
-  DEPLOYMENT_SOURCE=$SCRIPT_DIR
-fi
+IF NOT DEFINED DEPLOYMENT_TARGET (
+  SET DEPLOYMENT_TARGET=%ARTIFACTS%\wwwroot
+)
 
-if [[ ! -n "$NEXT_MANIFEST_PATH" ]]; then
-  NEXT_MANIFEST_PATH=$ARTIFACTS/manifest
+IF NOT DEFINED NEXT_MANIFEST_PATH (
+  SET NEXT_MANIFEST_PATH=%ARTIFACTS%\manifest
 
-  if [[ ! -n "$PREVIOUS_MANIFEST_PATH" ]]; then
-    PREVIOUS_MANIFEST_PATH=$NEXT_MANIFEST_PATH
-  fi
-fi
+  IF NOT DEFINED PREVIOUS_MANIFEST_PATH (
+    SET PREVIOUS_MANIFEST_PATH=%ARTIFACTS%\manifest
+  )
+)
 
-if [[ ! -n "$DEPLOYMENT_TARGET" ]]; then
-  DEPLOYMENT_TARGET=$ARTIFACTS/wwwroot
-else
-  KUDU_SERVICE=true
-fi
-
-if [[ ! -n "$KUDU_SYNC_CMD" ]]; then
-  # Install kudu sync
+IF NOT DEFINED KUDU_SYNC_CMD (
+  :: Install kudu sync
   echo Installing Kudu Sync
-  npm install kudusync -g --silent
-  exitWithMessageOnError "npm failed"
+  call npm install kudusync -g --silent
+  IF !ERRORLEVEL! NEQ 0 goto error
 
-  if [[ ! -n "$KUDU_SERVICE" ]]; then
-    # In case we are running locally this is the correct location of kuduSync
-    KUDU_SYNC_CMD=kuduSync
-  else
-    # In case we are running on kudu service this is the correct location of kuduSync
-    KUDU_SYNC_CMD=$APPDATA/npm/node_modules/kuduSync/bin/kuduSync
-  fi
-fi
+  :: Locally just running "kuduSync" would also work
+  SET KUDU_SYNC_CMD=%appdata%\npm\kuduSync.cmd
+)
+goto Deployment
 
-##################################################################################################################################
-# Deployment
-# ----------
+:: Utility Functions
+:: -----------------
 
-echo Handling react app deployment.
+:SelectNodeVersion
 
-# 1. Install npm packages
-if [ -e "$DEPLOYMENT_SOURCE/package.json" ]; then
-  cd "$DEPLOYMENT_SOURCE/Frontend"
-  echo "Running npm install"
-  eval npm install
-  exitWithMessageOnError "npm failed"
-  echo "Building react app"
-  eval npm run build
-  exitWithMessageOnError "react build failed"
-  cd "$DEPLOYMENT_SOURCE/Backend"
-  echo "Running npm install"
-  eval npm install
- cd - > /dev/null
-fi
+IF DEFINED KUDU_SELECT_NODE_VERSION_CMD (
+  :: The following are done only on Windows Azure Websites environment
+  call %KUDU_SELECT_NODE_VERSION_CMD% "%DEPLOYMENT_SOURCE%" "%DEPLOYMENT_TARGET%" "%DEPLOYMENT_TEMP%"
+  IF !ERRORLEVEL! NEQ 0 goto error
 
-# 2. KuduSync
-if [[ "$IN_PLACE_DEPLOYMENT" -ne "1" ]]; then
-  "$KUDU_SYNC_CMD" -v 50 -f "$DEPLOYMENT_SOURCE/build" -t "$DEPLOYMENT_TARGET" -n "$NEXT_MANIFEST_PATH" -p "$PREVIOUS_MANIFEST_PATH" -i ".git;.hg;.deployment;deploy.sh"
-  exitWithMessageOnError "Kudu Sync failed"
-fi
+  IF EXIST "%DEPLOYMENT_TEMP%\__nodeVersion.tmp" (
+    SET /p NODE_EXE=<"%DEPLOYMENT_TEMP%\__nodeVersion.tmp"
+    IF !ERRORLEVEL! NEQ 0 goto error
+  )
+  
+  IF EXIST "%DEPLOYMENT_TEMP%\__npmVersion.tmp" (
+    SET /p NPM_JS_PATH=<"%DEPLOYMENT_TEMP%\__npmVersion.tmp"
+    IF !ERRORLEVEL! NEQ 0 goto error
+  )
 
-##################################################################################################################################
-echo "Finished successfully."
+  IF NOT DEFINED NODE_EXE (
+    SET NODE_EXE=node
+  )
+
+  SET NPM_CMD="!NODE_EXE!" "!NPM_JS_PATH!"
+) ELSE (
+  SET NPM_CMD=npm
+  SET NODE_EXE=node
+)
+
+goto :EOF
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Deployment
+:: ----------
+
+:Deployment
+echo Handling node.js deployment.
+
+:: 1. KuduSync
+IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
+  call :ExecuteCmd "%KUDU_SYNC_CMD%" -v 50 -f "%DEPLOYMENT_SOURCE%" -t "%DEPLOYMENT_TARGET%" -n "%NEXT_MANIFEST_PATH%" -p "%PREVIOUS_MANIFEST_PATH%" -i ".git;.hg;.deployment;deploy.cmd"
+  IF !ERRORLEVEL! NEQ 0 goto error
+)
+
+:: 2. Select node version
+call :SelectNodeVersion
+
+
+pushd "%DEPLOYMENT_TARGET%"
+pushd "Frontend"
+call :ExecuteCmd !NPM_CMD! install
+IF !ERRORLEVEL! NEQ 0 goto error
+call :ExecuteCmd !NPM_CMD! run build
+IF !ERRORLEVEL! NEQ 0 goto error
+popd
+popd
+
+pushd "Backend"
+call :ExecuteCmd !NPM_CMD! install
+IF !ERRORLEVEL! NEQ 0 goto error
+popd
+)
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+goto end
+
+:: Execute command routine that will echo out when error
+:ExecuteCmd
+setlocal
+set _CMD_=%*
+call %_CMD_%
+if "%ERRORLEVEL%" NEQ "0" echo Failed exitCode=%ERRORLEVEL%, command=%_CMD_%
+exit /b %ERRORLEVEL%
+
+:error
+endlocal
+echo An error has occurred during web site deployment.
+call :exitSetErrorLevel
+call :exitFromFunction 2>nul
+
+:exitSetErrorLevel
+exit /b 1
+
+:exitFromFunction
+()
+
+:end
+endlocal
+echo Finished successfully.
