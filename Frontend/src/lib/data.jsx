@@ -30,7 +30,7 @@ class Data
     {
         try
         {
-            await axios.post('http://localhost:80/addBrother', brother);
+            await axios.post('http://localhost:8080/addBrother', brother);
         }
         catch (err)
         {
@@ -44,7 +44,7 @@ class Data
     {
         try
         {
-            await axios.post('http://localhost:80/updateBrother', brother);
+            await axios.post('http://localhost:8080/updateBrother', brother);
         }
         catch (err)
         {
@@ -65,7 +65,7 @@ class Data
         let resp;
         try
         {
-            resp = await axios.post(`http://localhost:80/${endpoint}`);
+            resp = await axios.post(`http://localhost:8080/${endpoint}`);
         }
         catch (err)
         {

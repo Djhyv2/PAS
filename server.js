@@ -81,7 +81,7 @@ app.post('/updateBrother', (req, res) =>
     WHERE id=${req.body.id}`);
 });
 
-app.listen(80, () =>
+app.listen(8080, () =>
 {
     console.log('Server started on Port 80');
 });
