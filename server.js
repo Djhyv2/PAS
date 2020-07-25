@@ -7,7 +7,7 @@ const auth = require('./auth.json');
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
-app.use(express.static('../Frontend/build'));
+app.use(express.static('./build'));
 
 function sqlEndpoint(req, res, sqlCommand)
 {
