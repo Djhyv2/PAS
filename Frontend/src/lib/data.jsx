@@ -42,7 +42,16 @@ class Data
 
     static async updateExisting(brother)
     {
-        console.log(brother);
+        try
+        {
+            await axios.post('http://localhost:5000/updateBrother', brother);
+        }
+        catch (err)
+        {
+            console.log(err);
+            return err.message;
+        }
+        return null;
     }
 
     static async getBrother(id)

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './BrotherForm.css';
 import {
-    IonInput, IonDatetime, IonLabel, IonItem, IonSelectOption, IonSelect, IonButton, IonToast,
+    IonInput, IonDatetime, IonLabel, IonItem, IonSelectOption, IonSelect, IonButton, IonToast, IonCheckbox,
 } from '@ionic/react';
 import PropTypes from 'prop-types';
 import BrotherDropDown from './BrotherDropDown';
@@ -18,13 +18,27 @@ class BrotherFormComponent extends Component
     async submit(e)
     {
         e.preventDefault();
-        const idElement = document.getElementById('editedUserIdInput');
-        let id;
-        if (idElement)
+        const idInput = document.getElementById('editedUserIdInput');
+        let id = null;
+        if (idInput)
         {
-            id = parseInt(idElement.value?.slice(0, 4), 10);
+            const idOption = document.querySelector(`option[value='${idInput.value}']`);
+            if (null != idOption)
+            {
+                id = parseInt(idOption.getAttribute('data-value'), 10);
+            }
+            if ('' !== idInput.value && null === id)
+            {
+                this.setState({ message: 'Invalid Brother to Edit' });
+                return;
+            }
         }
-        const year = parseInt(document.getElementById('yearSelect').value?.slice(0, 4), 10);
+        const yearElement = document.getElementById('yearSelect');
+        let year;
+        if (null !== yearElement.value)
+        {
+            year = parseInt(yearElement.value?.slice(0, 4), 10);
+        }
         let name = document.getElementById('nameInput').value;
         if ('' === name)
         {
@@ -69,7 +83,9 @@ class BrotherFormComponent extends Component
     render()
     {
         const currentYear = new Date().getFullYear();
-        const { additionalItemsBottom, additionalItemsTop, buttonText } = this.props;
+        const {
+            additionalItemsBottom, additionalItemsTop, buttonText, clearYear,
+        } = this.props;
         const { message } = this.state;
         return (
             <form onSubmit={this.submit}>
@@ -81,7 +97,7 @@ class BrotherFormComponent extends Component
                         id="yearSelect"
                         name="year"
                         displayFormat="YYYY"
-                        value={currentYear}
+                        value={clearYear ? currentYear : null}
                         required
                     />
                 </IonItem>
@@ -115,6 +131,34 @@ class BrotherFormComponent extends Component
                         <IonSelectOption value="Founder">Founder</IonSelectOption>
                     </IonSelect>
                 </IonItem>
+                <IonItem>
+                    <IonCheckbox
+                        slot="start"
+                        onIonChange={(event) =>
+                        {
+                            if ('on' === event.target.value)
+                            {
+                                document.querySelectorAll('input').forEach((e) =>
+                                {
+                                    e.removeAttribute('required');
+                                });
+                                if (clearYear)
+                                {
+                                    document.getElementById('yearSelect').value = null;
+                                }
+                            }
+                            else
+                            {
+                                document.getElementById('yearSelect').setAttribute('required', 'required');
+                                document.getElementById('nameInput').setAttribute('required', 'required');
+                                document.getElementById('staffNameInput').setAttribute('required', 'required');
+                                document.getElementById('bigBrotherInput').setAttribute('required', 'required');
+                                document.getElementById('statusSelect').setAttribute('required', 'required');
+                            }
+                        }}
+                    />
+                    <IonLabel>Check if brother has incomplete information</IonLabel>
+                </IonItem>
                 {additionalItemsBottom}
                 <IonButton class="ion-margin-top" expand="block" type="submit">{buttonText}</IonButton>
             </form>
@@ -126,6 +170,7 @@ BrotherFormComponent.propTypes = {
     additionalItemsTop: PropTypes.element,
     buttonText: PropTypes.string,
     callback: PropTypes.func,
+    clearYear: PropTypes.bool,
 };
 BrotherFormComponent.defaultProps = {
     additionalItemsTop: '',
@@ -133,5 +178,6 @@ BrotherFormComponent.defaultProps = {
     buttonText: 'Submit',
     callback: () =>
     {},
+    clearYear: true,
 };
 export default BrotherFormComponent;

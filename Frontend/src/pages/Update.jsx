@@ -59,6 +59,7 @@ class Update extends Component
                         </IonToolbar>
                     </IonHeader>
                     <BrotherForm
+                        clearYear={false}
                         buttonText="Update"
                         callback={Data.updateExisting}
                         additionalItemsTop={(

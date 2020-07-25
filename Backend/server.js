@@ -72,6 +72,15 @@ app.post('/addBrother', (req, res) =>
     VALUES (${req.body.year},${name},${staffName},${req.body.bigBrother},'${req.body.status}')`);
 });
 
+app.post('/updateBrother', (req, res) =>
+{
+    const name = req.body.name ? `'${req.body.name}'` : null;
+    const staffName = req.body.staffName ? `'${req.body.staffName}'` : null;
+    sqlEndpoint(req, res, `UPDATE pas 
+    SET year =${req.body.year}, name=${name}, staffName=${staffName}, bigBrother=${req.body.bigBrother}, status='${req.body.status}' 
+    WHERE id=${req.body.id}`);
+});
+
 app.listen(5000, () =>
 {
     console.log('Server started on Port 5000');
