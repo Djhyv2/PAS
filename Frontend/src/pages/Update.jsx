@@ -1,35 +1,50 @@
 import React, { Component } from 'react';
 import {
-    IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonItem, IonLabel,
+    IonContent, IonHeader, IonPage, IonTitle, IonToolbar,
 } from '@ionic/react';
 import './Update.css';
 import Data from '../lib/data';
 import BrotherForm from '../components/BrotherForm';
+import BrotherDropDown from '../components/BrotherDropDown';
 
 class Update extends Component
 {
-    constructor()
+    static async setValues()
     {
-        super();
-        this.state = { brothers: [] };
-    }
-
-    async componentDidMount()
-    {
-        const brothers = await Data.getBrothers();
-        this.setState({ brothers });
-    }
-
-    setValues(e)
-    {
-        console.log(e.target.value);
+        const input = document.getElementById('editedUserIdInput');
+        const option = document.querySelector(`option[value='${input.value}']`);
+        let id = null;
+        if (null != option)
+        {
+            id = parseInt(option.getAttribute('data-value'), 10);
+        }
+        else
+        {
+            return;
+        }
+        let brotherData = await Data.getBrother(id);
+        if (0 === brotherData.length)
+        {
+            return;
+        }
+        [brotherData] = brotherData;
+        document.getElementById('nameInput').value = brotherData?.name;
+        document.getElementById('staffNameInput').value = brotherData?.staffName;
+        document.getElementById('yearSelect').value = brotherData?.year;
+        document.getElementById('statusSelect').value = brotherData?.status;
+        if (null != brotherData.bigBrother)
+        {
+            const bigBrotherOption = document.querySelector(`option[data-value='${brotherData.bigBrother}']`);
+            document.getElementById('bigBrotherInput').value = bigBrotherOption.value;
+        }
+        else
+        {
+            document.getElementById('bigBrotherInput').value = null;
+        }
     }
 
     render()
     {
-        const { brothers } = this.state;
-        //eslint-disable-next-line jsx-a11y/control-has-associated-label
-        const optionsList = brothers.map((brother) => (<option data-value={brother.id} value={brother.Name} />));
         return (
             <IonPage>
                 <IonHeader>
@@ -44,20 +59,10 @@ class Update extends Component
                         </IonToolbar>
                     </IonHeader>
                     <BrotherForm
+                        buttonText="Update"
                         callback={Data.updateExisting}
                         additionalItemsTop={(
-                            <IonItem>
-                                <IonLabel position="stacked">Big Brother</IonLabel>
-                                <input
-                                    onChange={this.setValues}
-                                    id="bigBrotherInput"
-                                    list="bigBrotherList"
-                                    required
-                                />
-                                <datalist id="bigBrotherList">
-                                    {optionsList}
-                                </datalist>
-                            </IonItem>
+                            <BrotherDropDown id="editedUserIdInput" list="editedUserList" label="Brother to Edit" onChange={Update.setValues} />
                         )}
                     />
                 </IonContent>

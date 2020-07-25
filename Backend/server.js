@@ -59,6 +59,11 @@ app.post('/brothersList', (req, res) =>
     FROM pas ORDER BY year DESC`);
 });
 
+app.post('/brother/:id', (req, res) =>
+{
+    sqlEndpoint(req, res, `SELECT year, name, staffName, bigBrother, status FROM pas WHERE id =${req.params.id}`);
+});
+
 app.post('/addBrother', (req, res) =>
 {
     const name = req.body.name ? `'${req.body.name}'` : null;

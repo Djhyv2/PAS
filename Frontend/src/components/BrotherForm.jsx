@@ -1,29 +1,29 @@
 import React, { Component } from 'react';
 import './BrotherForm.css';
 import {
-    IonInput, IonDatetime, IonLabel, IonItem, IonSelectOption, IonSelect, IonButton,
+    IonInput, IonDatetime, IonLabel, IonItem, IonSelectOption, IonSelect, IonButton, IonToast,
 } from '@ionic/react';
 import PropTypes from 'prop-types';
-import Data from '../lib/data';
+import BrotherDropDown from './BrotherDropDown';
 
 class BrotherFormComponent extends Component
 {
     constructor()
     {
         super();
-        this.state = { brothers: [] };
         this.submit = this.submit.bind(this);
+        this.state = { message: null };
     }
 
-    async componentDidMount()
-    {
-        const brothers = await Data.getBrothers();
-        this.setState({ brothers });
-    }
-
-    submit(e)
+    async submit(e)
     {
         e.preventDefault();
+        const idElement = document.getElementById('editedUserIdInput');
+        let id;
+        if (idElement)
+        {
+            id = parseInt(idElement.value?.slice(0, 4), 10);
+        }
         const year = parseInt(document.getElementById('yearSelect').value?.slice(0, 4), 10);
         let name = document.getElementById('nameInput').value;
         if ('' === name)
@@ -42,23 +42,38 @@ class BrotherFormComponent extends Component
         {
             bigBrother = parseInt(option.getAttribute('data-value'), 10);
         }
+        if ('' !== input.value && null === bigBrother)
+        {
+            this.setState({ message: 'Invalid Big Brother' });
+            return;
+        }
         const status = document.getElementById('statusSelect').value;
         const values = {
-            year, name, staffName, bigBrother, status,
+            id, year, name, staffName, bigBrother, status,
         };
         const { callback } = this.props;
-        callback(values);
+        const returnValue = await callback(values);
+        if (null === returnValue)
+        {
+            this.setState({ message: 'Successful Operation' });
+            document.getElementById('nameInput').value = null;
+            document.getElementById('staffNameInput').value = null;
+            document.getElementById('bigBrotherInput').value = null;
+        }
+        else
+        {
+            this.setState({ message: `Failed Operation: ${returnValue}` });
+        }
     }
 
     render()
     {
         const currentYear = new Date().getFullYear();
-        const { brothers } = this.state;
-        //eslint-disable-next-line jsx-a11y/control-has-associated-label
-        const optionsList = brothers.map((brother) => (<option data-value={brother.id} value={brother.Name} />));
         const { additionalItemsBottom, additionalItemsTop, buttonText } = this.props;
+        const { message } = this.state;
         return (
             <form onSubmit={this.submit}>
+                <IonToast isOpen={null !== message} message={message} position="top" onDidDismiss={() => this.setState({ message: null })} buttons={[{ text: 'Close', role: 'cancel' }]} />
                 {additionalItemsTop}
                 <IonItem>
                     <IonLabel position="floating">Year</IonLabel>
@@ -86,17 +101,7 @@ class BrotherFormComponent extends Component
                         required
                     />
                 </IonItem>
-                <IonItem>
-                    <IonLabel position="stacked">Big Brother</IonLabel>
-                    <input
-                        id="bigBrotherInput"
-                        list="bigBrotherList"
-                        required
-                    />
-                    <datalist id="bigBrotherList">
-                        {optionsList}
-                    </datalist>
-                </IonItem>
+                <BrotherDropDown id="bigBrotherInput" list="bigBrotherInputList" label="Big Brother" />
                 <IonItem>
                     <IonLabel position="floating">Status</IonLabel>
                     <IonSelect

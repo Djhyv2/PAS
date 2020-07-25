@@ -5,7 +5,7 @@ class Data
 {
     static async fetchByYear()
     {
-        const data = await Data.performReq('treeByYear');
+        const data = await Data.performSelectReq('treeByYear');
         data.forEach((element) =>
         {
             //eslint-disable-next-line no-param-reassign
@@ -16,28 +16,47 @@ class Data
 
     static async fetchByGeneration()
     {
-        const data = await Data.performReq('treeByGeneration');
+        const data = await Data.performSelectReq('treeByGeneration');
         return data;
     }
 
     static async getBrothers()
     {
-        const data = await Data.performReq('brothersList');
+        const data = await Data.performSelectReq('brothersList');
         return data;
     }
 
     static async addNew(brother)
     {
-        const data = await Data.performReq('addBrother', brother);
+        try
+        {
+            await axios.post('http://localhost:5000/addBrother', brother);
+        }
+        catch (err)
+        {
+            console.log(err);
+            return err.message;
+        }
+        return null;
+    }
+
+    static async updateExisting(brother)
+    {
+        console.log(brother);
+    }
+
+    static async getBrother(id)
+    {
+        const data = await Data.performSelectReq(`brother/${id}`);
         return data;
     }
 
-    static async performReq(endpoint, data)
+    static async performSelectReq(endpoint)
     {
         let resp;
         try
         {
-            resp = await axios.post(`http://localhost:5000/${endpoint}`, data);
+            resp = await axios.post(`http://localhost:5000/${endpoint}`);
         }
         catch (err)
         {
