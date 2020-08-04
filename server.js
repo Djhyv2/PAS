@@ -86,7 +86,8 @@ app.get('*', (req, res) =>
     res.sendFile(`${__dirname}/build/index.html`);
 });
 
-app.listen(8080, () =>
+const port = process.env.PORT || 8080;
+app.listen(port, () =>
 {
-    console.log('Server started on Port 80');
+    console.log(`Server started on Port ${port}`);
 });
