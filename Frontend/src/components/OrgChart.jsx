@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import OrgChart from '@balkangraph/orgchart.js/orgchart';
 import PropTypes from 'prop-types';
+import OrgChart from '../orgchart';
 import './OrgChart.css';
 
 class OrgChartComponent extends Component
