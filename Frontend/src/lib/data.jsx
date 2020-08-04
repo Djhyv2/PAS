@@ -28,9 +28,10 @@ class Data
 
     static async addNew(brother)
     {
+        const url = 'https://phialphasigma.azurewebsites.net';
         try
         {
-            await axios.post('http://localhost:8080/addBrother', brother);
+            await axios.post(`${url}/addBrother`, brother);
         }
         catch (err)
         {
@@ -42,9 +43,10 @@ class Data
 
     static async updateExisting(brother)
     {
+        const url = 'https://phialphasigma.azurewebsites.net';
         try
         {
-            await axios.post('http://localhost:8080/updateBrother', brother);
+            await axios.post(`${url}/updateBrother`, brother);
         }
         catch (err)
         {
@@ -62,10 +64,11 @@ class Data
 
     static async performSelectReq(endpoint)
     {
+        const url = 'https://phialphasigma.azurewebsites.net';
         let resp;
         try
         {
-            resp = await axios.post(`http://localhost:8080/${endpoint}`);
+            resp = await axios.post(`${url}/${endpoint}`);
         }
         catch (err)
         {
