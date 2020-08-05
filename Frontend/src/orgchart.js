@@ -1731,7 +1731,6 @@ OrgChart.prototype._mouseDownHandler = function(t, e, r) {
 }, OrgChart.remote.setItem = function(t, e) {
     OrgChart._browser().msie || OrgChart._browser().edge ? OrgChart.remote[t] = e : localStorage.setItem(t, e)
 }, OrgChart.remote._findRegion = function(r) {
-    return;
     var t = OrgChart.remote.getItem("funcUrl");
     console.log(`T:${t}`)
     if (t) r(t);
