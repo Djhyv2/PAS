@@ -21,6 +21,7 @@ class OrgChartComponent extends Component
             {
                 tags[`subLevels${i}`] = { subLevels: i };
             }
+
             const chart = new OrgChart(document.getElementById('orgchart'), {
                 nodes,
                 nodeBinding: {

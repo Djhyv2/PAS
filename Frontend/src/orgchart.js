@@ -1731,7 +1731,9 @@ OrgChart.prototype._mouseDownHandler = function(t, e, r) {
 }, OrgChart.remote.setItem = function(t, e) {
     OrgChart._browser().msie || OrgChart._browser().edge ? OrgChart.remote[t] = e : localStorage.setItem(t, e)
 }, OrgChart.remote._findRegion = function(r) {
+    return;
     var t = OrgChart.remote.getItem("funcUrl");
+    console.log(`T:${t}`)
     if (t) r(t);
     else {
         for (var i = ["au-e", "au-se", "brs", "ca", "ca-e", "easia", "eus-2", "eus", "fr", "ind", "jp-e", "jp-w", "kr", "n-eu", "se-asia", "s-ind", "uk-s", "uk-w", "us", "us-n-c", "us-s-c", "w-c-us", "w-eu", "w-ind", "w-us-2", "wus"], a = [], n = 0; n < i.length; n++) a.push(new XMLHttpRequest);
