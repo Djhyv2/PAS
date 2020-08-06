@@ -1711,8 +1711,6 @@ OrgChart.prototype._mouseDownHandler = function(t, e, r) {
         for (var e = 0; e < r.length; e++) OrgChart.remote._fromResDTO(r[e], t, 0, r, a);
         i()
     }) : (s = JSON.stringify(s), OrgChart.idb.read(s, function(t, e) {
-        console.log(`T:${t}`);
-        t = true;
         t ? OrgChart.remote._proceed(r, e.res, a, i) : OrgChart.remote._findRegion(function(t) {
             OrgChart._ajax(t, "post", s, "json", function(t) {
                 t.error ? i(2) : (OrgChart.remote._proceed(r, t, a, i), OrgChart.idb.write({
