@@ -1711,6 +1711,7 @@ OrgChart.prototype._mouseDownHandler = function(t, e, r) {
         for (var e = 0; e < r.length; e++) OrgChart.remote._fromResDTO(r[e], t, 0, r, a);
         i()
     }) : (s = JSON.stringify(s), OrgChart.idb.read(s, function(t, e) {
+        console.log(`T:${t}`);
         t ? OrgChart.remote._proceed(r, e.res, a, i) : OrgChart.remote._findRegion(function(t) {
             OrgChart._ajax(t, "post", s, "json", function(t) {
                 t.error ? i(2) : (OrgChart.remote._proceed(r, t, a, i), OrgChart.idb.write({
@@ -1732,7 +1733,6 @@ OrgChart.prototype._mouseDownHandler = function(t, e, r) {
     OrgChart._browser().msie || OrgChart._browser().edge ? OrgChart.remote[t] = e : localStorage.setItem(t, e)
 }, OrgChart.remote._findRegion = function(r) {
     var t = OrgChart.remote.getItem("funcUrl");
-    console.log(`T:${t}`)
     if (t) r(t);
     else {
         for (var i = ["au-e", "au-se", "brs", "ca", "ca-e", "easia", "eus-2", "eus", "fr", "ind", "jp-e", "jp-w", "kr", "n-eu", "se-asia", "s-ind", "uk-s", "uk-w", "us", "us-n-c", "us-s-c", "w-c-us", "w-eu", "w-ind", "w-us-2", "wus"], a = [], n = 0; n < i.length; n++) a.push(new XMLHttpRequest);
