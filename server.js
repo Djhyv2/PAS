@@ -37,7 +37,7 @@ app.post('/treeByYear', (req, res) =>
     FROM pas AS brother 
     LEFT JOIN pas AS bigBrother
     ON brother.bigBrother = bigBrother.id
-    WHERE id < 190
+    WHERE brother.id < 190
     ORDER BY year;`);
 });
 
