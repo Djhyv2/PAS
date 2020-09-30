@@ -17,7 +17,7 @@ const Bylaws = () => (
                     <IonTitle size="large">Bylaws</IonTitle>
                 </IonToolbar>
             </IonHeader>
-            {/*<div className="bylaws">
+            {<div className="bylaws">
                 <p>Accurate as of 17 May 2020</p>
                 <h1>BYLAWS of ΦΑΣ Phi Alpha Sigma</h1>
                 <p>ARTICLE I – ΦΑΣ:</p>
@@ -217,7 +217,7 @@ const Bylaws = () => (
                     <br />
                     Information for Ecology
                 </p>
-            </div>*/}
+            </div>}
         </IonContent>
     </IonPage>
 );
